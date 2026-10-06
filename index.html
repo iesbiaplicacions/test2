@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Seguretat Informàtica · estil Apple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 1.5rem 4rem;
+            color: #1d1d1f;
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .card {
+            max-width: 720px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08), 0 8px 24px -6px rgba(0, 0, 0, 0.05);
+            padding: 2.6rem 2.4rem 2.4rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+            color: #1d1d1f;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #6e6e73;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #e8e8ed;
+            padding-bottom: 1.25rem;
+        }
+
+        /* Preguntes */
+        .question {
+            margin-bottom: 2.2rem;
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
+
+        .question p {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin-bottom: 1rem;
+            color: #1d1d1f;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.85rem 1.1rem;
+            background: #f5f5f7;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        .option:hover {
+            background: #ebebf0;
+        }
+
+        .option input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid #c6c6c8;
+            border-radius: 50%;
+            margin-right: 0.85rem;
+            margin-top: 0.15rem;
+            position: relative;
+            transition: all 0.1s ease;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .option input[type="radio"]:checked {
+            border-color: #0071e3;
+            background: #0071e3;
+            box-shadow: inset 0 0 0 4px #ffffff;
+        }
+
+        .option input[type="radio"]:focus-visible {
+            outline: 2px solid #0071e3;
+            outline-offset: 2px;
+        }
+
+        .option span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #1d1d1f;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Feedback visual */
+        .option.correct-highlight {
+            background: #e3f9e9;
+            border-color: #a3d9b0;
+        }
+
+        .option.incorrect-highlight {
+            background: #ffece8;
+            border-color: #f5b6ab;
+        }
+
+        .option.correct-highlight span,
+        .option.incorrect-highlight span {
+            font-weight: 500;
+        }
+
+        /* Botó */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            background: #0071e3;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 1rem 2.6rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: -0.01em;
+            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+            width: fit-content;
+        }
+
+        .btn:hover {
+            background: #0077ed;
+            box-shadow: 0 6px 14px rgba(0, 113, 227, 0.3);
+            transform: scale(1.01);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            background: #0062c3;
+        }
+
+        /* Resultat sticky en la part superior per veure'l sempre */
+        .result {
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+            margin: 0 auto 1.8rem;
+            padding: 1rem 1.5rem;
+            background: #ffffff;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #1d1d1f;
+            transition: all 0.3s ease;
+            border: 1px solid #e8e8ed;
+            letter-spacing: -0.01em;
+            min-height: 3.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .result span {
+            font-weight: 600;
+            color: #0071e3;
+            margin: 0 0.35rem;
+            font-size: 1.6rem;
+        }
+
+        .result.empty {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            margin-bottom: 0;
+            min-height: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+        }
+
+        /* mòbil */
+        @media (max-width: 520px) {
+            body {
+                padding: 1rem 0.8rem 3rem;
+            }
+            .card {
+                padding: 1.8rem 1.4rem;
+                border-radius: 24px;
+            }
+            h1 {
+                font-size: 1.65rem;
+            }
+            .question p {
+                font-size: 1.05rem;
+            }
+            .btn {
+                width: 100%;
+                padding: 1rem 1.5rem;
+            }
+            .result {
+                font-size: 1.15rem;
+                padding: 0.85rem 1rem;
+            }
+            .result span {
+                font-size: 1.4rem;
+            }
+            .option {
+                padding: 0.75rem 0.9rem;
+            }
+            .option span {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Test de Seguretat Informàtica</h1>
+        <div class="subtitle">20 preguntes · Tria la resposta correcta · Nota sobre 10</div>
+
+        <div class="result empty" id="result"></div>
+
+        <form id="quizForm">
+            <!-- 1 -->
+            <div class="question">
+                <p>1. Per què cal protegir la informació en un sistema informàtic?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q1" value="a"><span>a) Només per complir amb la normativa legal vigent</span></label>
+                    <label class="option"><input type="radio" name="q1" value="b"><span>b) Perquè és un actiu valuós que pot patir pèrdues, robatori o modificació no autoritzada</span></label>
+                    <label class="option"><input type="radio" name="q1" value="c"><span>c) Únicament per evitar que els usuaris facen servir programari no autoritzat</span></label>
+                    <label class="option"><input type="radio" name="q1" value="d"><span>d) Perquè els sistemes informàtics sempre són insegurs per naturalesa</span></label>
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="question">
+                <p>2. Quins són els tres pilars clàssics de la seguretat de la informació?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q2" value="a"><span>a) Autenticació, autorització i auditoria</span></label>
+                    <label class="option"><input type="radio" name="q2" value="b"><span>b) Confidencialitat, integritat i disponibilitat</span></label>
+                    <label class="option"><input type="radio" name="q2" value="c"><span>c) Prevenció, detecció i correcció</span></label>
+                    <label class="option"><input type="radio" name="q2" value="d"><span>d) Física, lògica i activa</span></label>
+                </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="question">
+                <p>3. La confidencialitat garanteix que:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q3" value="a"><span>a) La informació estiga sempre disponible quan es necessite</span></label>
+                    <label class="option"><input type="radio" name="q3" value="b"><span>b) La informació no siga modificada per persones no autoritzades</span></label>
+                    <label class="option"><input type="radio" name="q3" value="c"><span>c) Només les persones autoritzades puguen accedir a la informació</span></label>
+                    <label class="option"><input type="radio" name="q3" value="d"><span>d) Es puga demostrar qui ha enviat un missatge</span></label>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="question">
+                <p>4. La integritat de la informació es refereix a:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q4" value="a"><span>a) Que la informació siga exacta, completa i no haja estat alterada de manera no autoritzada</span></label>
+                    <label class="option"><input type="radio" name="q4" value="b"><span>b) Que la informació estiga xifrada en tot moment</span></label>
+                    <label class="option"><input type="radio" name="q4" value="c"><span>c) Que la informació estiga disponible 24/7</span></label>
+                    <label class="option"><input type="radio" name="q4" value="d"><span>d) Que la informació només siga accessible des de la xarxa interna</span></label>
+                </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="question">
+                <p>5. La disponibilitat implica que:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q5" value="a"><span>a) La informació només estiga accessible en horari laboral</span></label>
+                    <label class="option"><input type="radio" name="q5" value="b"><span>b) Els usuaris autoritzats puguen accedir a la informació i als recursos quan els calga</span></label>
+                    <label class="option"><input type="radio" name="q5" value="c"><span>c) La informació estiga duplicada en tres servidors</span></label>
+                    <label class="option"><input type="radio" name="q5" value="d"><span>d) La informació no es puga esborrar mai</span></label>
+                </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="question">
+                <p>6. El principi de no repudi (no repudiació) significa que:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q6" value="a"><span>a) L'usuari no pot negar haver realitzat una acció o enviat un missatge</span></label>
+                    <label class="option"><input type="radio" name="q6" value="b"><span>b) L'usuari pot rebutjar les condicions d'ús del sistema</span></label>
+                    <label class="option"><input type="radio" name="q6" value="c"><span>c) El sistema no pot rebutjar cap petició d'accés</span></label>
+                    <label class="option"><input type="radio" name="q6" value="d"><span>d) Cap usuari pot ser expulsat del sistema</span></label>
+                </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="question">
+                <p>7. Quina diferència hi ha entre seguretat física i seguretat lògica?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q7" value="a"><span>a) La física protegeix el maquinari i les instal·lacions; la lògica protegeix les dades i el programari</span></label>
+                    <label class="option"><input type="radio" name="q7" value="b"><span>b) La física protegeix les dades; la lògica protegeix els equips</span></label>
+                    <label class="option"><input type="radio" name="q7" value="c"><span>c) Són sinònims i s'utilitzen indistintament</span></label>
+                    <label class="option"><input type="radio" name="q7" value="d"><span>d) La física només s'aplica a servidors i la lògica a ordinadors personals</span></label>
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="question">
+                <p>8. La seguretat passiva es caracteritza per:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q8" value="a"><span>a) Actuar abans de produir-se l'incident, prevenint-lo</span></label>
+                    <label class="option"><input type="radio" name="q8" value="b"><span>b) Detectar i corregir els danys un cop produïda l'amenaça</span></label>
+                    <label class="option"><input type="radio" name="q8" value="c"><span>c) Xifrar totes les comunicacions de la xarxa</span></label>
+                    <label class="option"><input type="radio" name="q8" value="d"><span>d) Analitzar les vulnerabilitats del sistema periòdicament</span></label>
+                </div>
+            </div>
+
+            <!-- 9 -->
+            <div class="question">
+                <p>9. La seguretat activa es caracteritza per:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q9" value="a"><span>a) Tenir com a objectiu evitar o prevenir les amenaces abans que es materialitzen</span></label>
+                    <label class="option"><input type="radio" name="q9" value="b"><span>b) Actuar només després que s'haga produït un atac</span></label>
+                    <label class="option"><input type="radio" name="q9" value="c"><span>c) Ser sempre més econòmica que la seguretat passiva</span></label>
+                    <label class="option"><input type="radio" name="q9" value="d"><span>d) No requerir cap mena de manteniment</span></label>
+                </div>
+            </div>
+
+            <!-- 10 -->
+            <div class="question">
+                <p>10. Quins són els tres factors d'autenticació clàssics?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q10" value="a"><span>a) Usuari, contrasenya i correu electrònic</span></label>
+                    <label class="option"><input type="radio" name="q10" value="b"><span>b) Una cosa que saps, una cosa que tens i una cosa que tu eres</span></label>
+                    <label class="option"><input type="radio" name="q10" value="c"><span>c) Xifrat, signatura i hash</span></label>
+                    <label class="option"><input type="radio" name="q10" value="d"><span>d) Confidencialitat, integritat i disponibilitat</span></label>
+                </div>
+            </div>
+
+            <!-- 11 -->
+            <div class="question">
+                <p>11. Un exemple de factor d'autenticació biomètric seria:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q11" value="a"><span>a) Una contrasenya</span></label>
+                    <label class="option"><input type="radio" name="q11" value="b"><span>b) Un token USB</span></label>
+                    <label class="option"><input type="radio" name="q11" value="c"><span>c) L'empremta dactilar o el reconeixement facial</span></label>
+                    <label class="option"><input type="radio" name="q11" value="d"><span>d) Un certificat digital emmagatzemat al disc</span></label>
+                </div>
+            </div>
+
+            <!-- 12 -->
+            <div class="question">
+                <p>12. Què significa el model AAA en seguretat informàtica?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q12" value="a"><span>a) Accés, Alerta i Auditoria</span></label>
+                    <label class="option"><input type="radio" name="q12" value="b"><span>b) Autenticació, Autorització i Auditoria (Accounting)</span></label>
+                    <label class="option"><input type="radio" name="q12" value="c"><span>c) Antivirus, Antispam i Antimalware</span></label>
+                    <label class="option"><input type="radio" name="q12" value="d"><span>d) Anàlisi, Avaluació i Acció</span></label>
+                </div>
+            </div>
+
+            <!-- 13 -->
+            <div class="question">
+                <p>13. La comunicació "extrem a extrem" (i2i / end-to-end) implica que:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q13" value="a"><span>a) Les dades viatgen xifrades entre els dos extrems i només ells les poden desxifrar</span></label>
+                    <label class="option"><input type="radio" name="q13" value="b"><span>b) Les dades passen sense xifrar per tots els intermediaris</span></label>
+                    <label class="option"><input type="radio" name="q13" value="c"><span>c) El servidor central desxifra sempre els missatges</span></label>
+                    <label class="option"><input type="radio" name="q13" value="d"><span>d) Només s'aplica a xarxes locals</span></label>
+                </div>
+            </div>
+
+            <!-- 14 -->
+            <div class="question">
+                <p>14. Què és una vulnerabilitat?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q14" value="a"><span>a) Un programa maliciós que ataca el sistema</span></label>
+                    <label class="option"><input type="radio" name="q14" value="b"><span>b) Una debilitat o error en el sistema que pot ser explotat per una amenaça</span></label>
+                    <label class="option"><input type="radio" name="q14" value="c"><span>c) Un atac que ja s'ha produït</span></label>
+                    <label class="option"><input type="radio" name="q14" value="d"><span>d) Una eina per protegir el sistema</span></label>
+                </div>
+            </div>
+
+            <!-- 15 -->
+            <div class="question">
+                <p>15. Què és un exploit?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q15" value="a"><span>a) Un tipus de contrasenya molt segura</span></label>
+                    <label class="option"><input type="radio" name="q15" value="b"><span>b) Una tècnica, codi o eina que aprofita una vulnerabilitat per comprometre el sistema</span></label>
+                    <label class="option"><input type="radio" name="q15" value="c"><span>c) Un mètode de xifrat de dades</span></label>
+                    <label class="option"><input type="radio" name="q15" value="d"><span>d) Un protocol de comunicació segura</span></label>
+                </div>
+            </div>
+
+            <!-- 16 -->
+            <div class="question">
+                <p>16. Quin d'aquests és un tipus de malware?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q16" value="a"><span>a) Tallafocs (firewall)</span></label>
+                    <label class="option"><input type="radio" name="q16" value="b"><span>b) Xifrat AES</span></label>
+                    <label class="option"><input type="radio" name="q16" value="c"><span>c) Troià (trojan)</span></label>
+                    <label class="option"><input type="radio" name="q16" value="d"><span>d) VPN</span></label>
+                </div>
+            </div>
+
+            <!-- 17 -->
+            <div class="question">
+                <p>17. Un atac de "phishing" consisteix principalment a:</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q17" value="a"><span>a) Enviar moltes peticions per saturar un servidor</span></label>
+                    <label class="option"><input type="radio" name="q17" value="b"><span>b) Enganyar l'usuari perquè revele informació confidencial fent-se passar per una entitat de confiança</span></label>
+                    <label class="option"><input type="radio" name="q17" value="c"><span>c) Xifrar les dades de la víctima i demanar un rescat</span></label>
+                    <label class="option"><input type="radio" name="q17" value="d"><span>d) Escanejar ports oberts d'una xarxa</span></label>
+                </div>
+            </div>
+
+            <!-- 18 -->
+            <div class="question">
+                <p>18. Quin és l'objectiu principal del Reglament General de Protecció de Dades (RGPD)?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q18" value="a"><span>a) Regular l'ús de programari lliure a les empreses</span></label>
+                    <label class="option"><input type="radio" name="q18" value="b"><span>b) Protegir les persones físiques pel que fa al tractament de les seves dades personals</span></label>
+                    <label class="option"><input type="radio" name="q18" value="c"><span>c) Establir les normes tècniques dels sistemes operatius</span></label>
+                    <label class="option"><input type="radio" name="q18" value="d"><span>d) Regular únicament les transaccions comercials electròniques</span></label>
+                </div>
+            </div>
+
+            <!-- 19 -->
+            <div class="question">
+                <p>19. En el context de l'Administració electrònica, què cal garantir principalment?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q19" value="a"><span>a) Que tots els tràmits es facen presencialment</span></label>
+                    <label class="option"><input type="radio" name="q19" value="b"><span>b) La identitat dels ciutadans i la integritat i confidencialitat de les seues dades en els tràmits telemàtics</span></label>
+                    <label class="option"><input type="radio" name="q19" value="c"><span>c) Que els tràmits només es puguen fer amb contrasenya simple</span></label>
+                    <label class="option"><input type="radio" name="q19" value="d"><span>d) Que no es guarde cap registre dels tràmits realitzats</span></label>
+                </div>
+            </div>
+
+            <!-- 20 -->
+            <div class="question">
+                <p>20. Quina afirmació sobre els tipus d'atacs és correcta?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q20" value="a"><span>a) Els atacs passius només modifiquen la informació sense llegir-la</span></label>
+                    <label class="option"><input type="radio" name="q20" value="b"><span>b) Els atacs actius busquen modificar, interrompre o destruir recursos, mentre que els passius solen interceptar o escoltar informació sense alterar-la</span></label>
+                    <label class="option"><input type="radio" name="q20" value="c"><span>c) Tots els atacs són sempre actius</span></label>
+                    <label class="option"><input type="radio" name="q20" value="d"><span>d) Els atacs passius sempre deixen traces evidents al sistema</span></label>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn" id="checkBtn">Corregir test</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        (function() {
+            // Solucionari extret del fitxer
+            const correctAnswers = {
+                q1: 'b', q2: 'b', q3: 'c', q4: 'a', q5: 'b',
+                q6: 'a', q7: 'a', q8: 'b', q9: 'a', q10: 'b',
+                q11: 'c', q12: 'b', q13: 'a', q14: 'b', q15: 'b',
+                q16: 'c', q17: 'b', q18: 'b', q19: 'b', q20: 'b'
+            };
+
+            const totalQuestions = Object.keys(correctAnswers).length;
+            const checkBtn = document.getElementById('checkBtn');
+            const resultDiv = document.getElementById('result');
+            const form = document.getElementById('quizForm');
+
+            function clearHighlights() {
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('correct-highlight', 'incorrect-highlight');
+                });
+            }
+
+            function highlightAnswers() {
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const name = `q${i}`;
+                    const correct = correctAnswers[name];
+                    const radios = document.getElementsByName(name);
+                    let selected = null;
+                    for (const r of radios) {
+                        if (r.checked) { selected = r.value; break; }
+                    }
+                    for (const r of radios) {
+                        const opt = r.closest('.option');
+                        if (!opt) continue;
+                        if (r.value === correct) {
+                            opt.classList.add('correct-highlight');
+                        }
+                        if (selected === r.value && r.value !== correct) {
+                            opt.classList.add('incorrect-highlight');
+                        }
+                    }
+                }
+            }
+
+            function corregirTest() {
+                clearHighlights();
+
+                let correctCount = 0;
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const name = `q${i}`;
+                    const radios = document.getElementsByName(name);
+                    let selected = null;
+                    for (const r of radios) {
+                        if (r.checked) { selected = r.value; break; }
+                    }
+                    if (selected === correctAnswers[name]) {
+                        correctCount++;
+                    }
+                }
+
+                const nota = (correctCount / totalQuestions) * 10;
+                const notaFormatada = Number.isInteger(nota) ? nota : nota.toFixed(1);
+
+                let missatge = '';
+                if (nota === 10) missatge = 'Perfecte!';
+                else if (nota >= 9) missatge = 'Excel·lent!';
+                else if (nota >= 7) missatge = 'Molt bé!';
+                else if (nota >= 5) missatge = 'Aprovat.';
+                else missatge = 'Cal repassar.';
+
+                resultDiv.classList.remove('empty');
+                resultDiv.innerHTML = `Nota: <span>${notaFormatada}/10</span> · ${missatge}`;
+
+                highlightAnswers();
+
+                // Desplaçament suau cap al resultat (per assegurar visibilitat)
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            checkBtn.addEventListener('click', corregirTest);
+
+            // Si es canvia una resposta, amaguem el resultat anterior i netegem feedback
+            form.addEventListener('change', function(e) {
+                if (e.target.type === 'radio') {
+                    clearHighlights();
+                    resultDiv.classList.add('empty');
+                    resultDiv.innerHTML = '';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
